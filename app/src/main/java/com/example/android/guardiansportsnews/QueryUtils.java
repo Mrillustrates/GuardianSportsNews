@@ -31,6 +31,22 @@ public class QueryUtils {
      *  a new URL that takes String input.
      */
 
+    public static List<SportsArticle> fetchArticleData(String requestUrl){
+        URL url = createURL(requestUrl);
+
+        String jsonResponse = null;
+
+        try{
+            jsonResponse = makeHttpRequest(url);
+        }
+        catch (IOException e) {
+            Log.e(LOG_TAG, "Error closing input stream", e);
+        }
+        List<SportsArticle> sportArticle = extractFeatureFromJson(jsonResponse);
+
+        return sportArticle;
+    }
+
     public static URL createURL(String stringURL){
         URL url = null;
         try {
@@ -113,21 +129,6 @@ public class QueryUtils {
         return output.toString();
     }
 
-    public static List<SportsArticle> fetchArticleData(String requestUrl){
-        URL url = createURL(requestUrl);
-
-        String jsonResponse = null;
-
-        try{
-            jsonResponse = makeHttpRequest(url);
-        }
-        catch (IOException e) {
-            Log.e(LOG_TAG, "Error closing input stream", e);
-        }
-        List<SportsArticle> sportArticle = extractFeatureFromJson(jsonResponse);
-
-        return sportArticle;
-    }
 
     private static List<SportsArticle> extractFeatureFromJson(String articleJSON){
         if(TextUtils.isEmpty(articleJSON)){
@@ -137,9 +138,9 @@ public class QueryUtils {
 
         try {
             JSONObject baseJsonResponse = new JSONObject(articleJSON);
-            JSONArray articleArray = baseJsonResponse.getJSONArray("results");
+            JSONArray articleArray = baseJsonResponse.getJSONObject("response").getJSONArray("results");
 
-            for(int i = 0; i < baseJsonResponse.length(); i++){
+            for(int i = 0; i < articleArray.length(); i++){
                 JSONObject currentArticle = articleArray.getJSONObject(i);
 
                 String articleTitle = currentArticle.getString("webTitle");

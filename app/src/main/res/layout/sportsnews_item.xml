@@ -9,7 +9,7 @@
         android:id = "@+id/news_article_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text = "Spurts Win Championship"
+        tools:text = "Spurs Win Championship"
         />
 
 </LinearLayout>
